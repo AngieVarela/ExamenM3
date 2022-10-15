@@ -120,7 +120,7 @@ export default function App() {
             required: true, pattern: /^[0-9]+$/g, maxLength: 10, minLength: 5
           }}
 
-          render={({ field: { onChange, onBlur, identificacion } }) => (
+          render={({ field: { onChange, onBlur } }) => (
             <TextInput
               style={[styles.inpust, {
                 borderColor: errors.identificacion?.type == "required" || errors.identificacion?.type == "pattern" || errors.identificacion?.type
@@ -149,7 +149,7 @@ export default function App() {
             required: true, pattern: /^[A-Za-zÁÉÍÓÚáéíóúñÑ ]+$/g, maxLength: 30, minLength: 3
           }}
 
-          render={({ field: { onChange, onBlur, nombres } }) => (
+          render={({ field: { onChange, onBlur } }) => (
 
             <TextInput
               style={[styles.inpust, {
@@ -179,7 +179,7 @@ export default function App() {
             required: true, pattern: /^[A-Za-zÁÉÍÓÚáéíóúñÑ ]+$/g, maxLength: 30, minLength: 3
           }}
 
-          render={({ field: { onChange, onBlur, asignatura } }) => (
+          render={({ field: { onChange, onBlur } }) => (
             <TextInput
               style={[styles.inpust, {
                 borderColor: errors.asignatura?.type == "required" || errors.asignatura?.type == "pattern" || errors.asignatura?.type
@@ -203,7 +203,7 @@ export default function App() {
         <Text>Nota 1*: </Text>
         <Controller control={control}
           rules={{ required: true, pattern: /^[0-5]+$/g }}
-          render={({ field: { onChange, onBlur, nota1 } }) => (
+          render={({ field: { onChange, onBlur } }) => (
 
             <TextInput
               style={[styles.inpust, { borderColor: errors.nota1?.type == "required" || errors.nota1?.type == "pattern" ? 'red' : 'lightblue' }]}
@@ -226,7 +226,7 @@ export default function App() {
         <Text>Nota 2*: </Text>
         <Controller control={control}
           rules={{ required: true, pattern: /^[0-5]+$/g }}
-          render={({ field: { onChange, onBlur, nota2 } }) => (
+          render={({ field: { onChange, onBlur } }) => (
             <TextInput
               style={[styles.inpust, { borderColor: errors.nota1?.type == "required" || errors.nota2?.type == "pattern" ? 'red' : 'lightblue' }]}
               onChangeText={(nota2) => setNota2(nota2)}
@@ -247,7 +247,7 @@ export default function App() {
         <Text>Nota 3*: </Text>
         <Controller control={control}
           rules={{ required: true, pattern: /^[0-5]+$/g }}
-          render={({ field: { onChange, onBlur, nota3 } }) => (
+          render={({ field: { onChange, onBlur } }) => (
 
             <TextInput
               style={[styles.inpust, { borderColor: errors.nota1?.type == "required" || errors.nota3?.type == "pattern" ? 'red' : 'lightblue' }]}
