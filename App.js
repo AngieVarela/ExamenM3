@@ -7,8 +7,15 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
+import { useForm, Controller } from 'react-hook-form';
+
 
 export default function App() {
+
+  const { control, handleSubmit, formState: { errors } } = useForm({
+    defaultValues: { identificacion: '', nombres: '', asignatura: '', nota1: '', nota2: '', nota3: '' }
+  })
+
   const [identificacion, setIdentificacion] = useState("");
   const [nombres, setNombres] = useState("");
   const [asignatura, setAsignaturas] = useState("");
@@ -21,7 +28,7 @@ export default function App() {
 
   // Referencias a elementos
   let refidentificacion = useRef();
-  const guardar = () => {
+  const onSubmit = () => {
     //Agregar datos al array a través del método setdefinitiva para el array definitiva
     setVarnotas((varnotas) => [
       ...varnotas,
@@ -57,7 +64,7 @@ export default function App() {
 
     if (definitiva >= 3) {
       setObservacion("APROBADO");
-    } else if (definitiva == 2 && 2.94) {
+    } else if (definitiva >= 2 && 2.94) {
       setObservacion("HABILITADO");
     } else {
       setObservacion("DESAPROBADO");
@@ -107,71 +114,163 @@ export default function App() {
 
       <View style={styles.body}>
         <Text>Identificación*: </Text>
-        <TextInput
-          //placeholder='Ingrese su identificación'
-          style={{ borderBottom: "solid 1px" }}
-          onChangeText={(identificacion) => setIdentificacion(identificacion)}
-          value={identificacion}
-          ref={refidentificacion}
-          required={true}
+
+        <Controller control={control}
+          rules={{
+            required: true, pattern: /^[0-9]+$/g, maxLength: 10, minLength: 5
+          }}
+
+          render={({ field: { onChange, onBlur, identificacion } }) => (
+            <TextInput
+              style={[styles.inpust, {
+                borderColor: errors.identificacion?.type == "required" || errors.identificacion?.type == "pattern" || errors.identificacion?.type
+                  == "maxLength" || errors.identificacion?.type == "minLength" ? 'red' : 'lightblue'
+              }]}
+              onChangeText={(identificacion) => setIdentificacion(identificacion)}
+              onChange={onChange}
+              onBlur={onBlur}
+              value={identificacion}
+              ref={refidentificacion}
+            />
+
+          )}
+          name="identificacion"
         />
+        {errors.identificacion?.type == "required" && <Text style={{ color: 'red' }}> La Identificacion es obligatoria</Text>}
+        {errors.identificacion?.type == "maxLength" && <Text style={{ color: 'red' }}> La Identificacion no puede exceder 10 caracteres</Text>}
+        {errors.identificacion?.type == "minLength" && <Text style={{ color: 'red' }}> La Identificacion es minimo de 5 caracteres</Text>}
+        {errors.identificacion?.type == "pattern" && <Text style={{ color: 'red' }}> La Identificacion solo debe ser con Numeros</Text>}
       </View>
 
       <View style={styles.body}>
         <Text>Nombres*: </Text>
-        <TextInput
-          //placeholder='Ingrese sus nombres'
-          style={{ borderBottom: "solid 1px" }}
-          onChangeText={(nombres) => setNombres(nombres)}
-          value={nombres}
+        <Controller control={control}
+          rules={{
+            required: true, pattern: /^[A-Za-zÁÉÍÓÚáéíóúñÑ ]+$/g, maxLength: 30, minLength: 3
+          }}
+
+          render={({ field: { onChange, onBlur, nombres } }) => (
+
+            <TextInput
+              style={[styles.inpust, {
+                borderColor: errors.nombres?.type == "required" || errors.nombres?.type == "pattern" || errors.nombres?.type
+                  == "maxLength" || errors.nombres?.type == "minLength" ? 'red' : 'lightblue'
+              }]}
+
+              onChangeText={(nombres) => setNombres(nombres)}
+              onChange={onChange}
+              onBlur={onBlur}
+              value={nombres}
+            />
+          )}
+          name="nombres"
+
         />
+        {errors.nombres?.type == "required" && <Text style={{ color: 'red' }}> El nombre es obligatorio</Text>}
+        {errors.nombres?.type == "maxLength" && <Text style={{ color: 'red' }}> El nombre no puede exceder 30 caracteres</Text>}
+        {errors.nombres?.type == "minLength" && <Text style={{ color: 'red' }}>El nombre minimo 3 caracteres</Text>}
+        {errors.nombres?.type == "pattern" && <Text style={{ color: 'red' }}> El nombre solo con letras y espacios</Text>}
       </View>
 
       <View style={styles.body}>
         <Text>Asignaturas*: </Text>
-        <TextInput
-          //placeholder='Ingrese la asignatura'
-          style={{ borderBottom: "solid 1px" }}
-          onChangeText={(asignatura) => setAsignaturas(asignatura)}
-          value={asignatura}
+        <Controller control={control}
+          rules={{
+            required: true, pattern: /^[A-Za-zÁÉÍÓÚáéíóúñÑ ]+$/g, maxLength: 30, minLength: 3
+          }}
+
+          render={({ field: { onChange, onBlur, asignatura } }) => (
+            <TextInput
+              style={[styles.inpust, {
+                borderColor: errors.asignatura?.type == "required" || errors.asignatura?.type == "pattern" || errors.asignatura?.type
+                  == "maxLength" || errors.asignatura?.type == "minLength" ? 'red' : 'lightblue'
+              }]}
+              onChangeText={(asignatura) => setAsignaturas(asignatura)}
+              onChange={onChange}
+              onBlur={onBlur}
+              value={asignatura}
+            />
+          )}
+          name="asignatura"
         />
+        {errors.asignatura?.type == "required" && <Text style={{ color: 'red' }}> la asignatura es obligatoria</Text>}
+        {errors.asignatura?.type == "maxLength" && <Text style={{ color: 'red' }}> la asignatura no puede exceder 30 caracteres</Text>}
+        {errors.asignatura?.type == "minLength" && <Text style={{ color: 'red' }}>la asignatura minimo 3 caracteres</Text>}
+        {errors.asignatura?.type == "pattern" && <Text style={{ color: 'red' }}> la asignatura solo con letras y espacios</Text>}
       </View>
 
       <View style={styles.body}>
         <Text>Nota 1*: </Text>
-        <TextInput
-          //placeholder='Ingrese la nota 1'
-          style={{ borderBottom: "solid 1px" }}
-          onChangeText={(nota1) => setNota1(nota1)}
-          value={nota1}
+        <Controller control={control}
+          rules={{ required: true, pattern: /^[0-5]+$/g }}
+          render={({ field: { onChange, onBlur, nota1 } }) => (
+
+            <TextInput
+              style={[styles.inpust, { borderColor: errors.nota1?.type == "required" || errors.nota1?.type == "pattern" ? 'red' : 'lightblue' }]}
+              onChangeText={(nota1) => setNota1(nota1)}
+              onChange={onChange}
+              onBlur={onBlur}
+              value={nota1}
+              maxLength={1}
+              minLength={1}
+            />
+
+          )}
+          name="nota1"
         />
+        {errors.nota1?.type == "required" && <Text style={{ color: 'red' }}> El Nota 1 es obligatoria</Text>}
+        {errors.nota1?.type == "pattern" && <Text style={{ color: 'red' }}>Nota Maxima es 5 y solo numeros</Text>}
       </View>
 
       <View style={styles.body}>
         <Text>Nota 2*: </Text>
-        <TextInput
-          //placeholder='Ingrese la nota 2'
-          style={{ borderBottom: "solid 1px" }}
-          onChangeText={(nota2) => setNota2(nota2)}
-          value={nota2}
+        <Controller control={control}
+          rules={{ required: true, pattern: /^[0-5]+$/g }}
+          render={({ field: { onChange, onBlur, nota2 } }) => (
+            <TextInput
+              style={[styles.inpust, { borderColor: errors.nota1?.type == "required" || errors.nota2?.type == "pattern" ? 'red' : 'lightblue' }]}
+              onChangeText={(nota2) => setNota2(nota2)}
+              onChange={onChange}
+              onBlur={onBlur}
+              value={nota2}
+              maxLength={1}
+              minLength={1}
+            />
+          )}
+          name="nota2"
         />
+        {errors.nota2?.type == "required" && <Text style={{ color: 'red' }}> El Nota 2 es obligatoria</Text>}
+        {errors.nota2?.type == "pattern" && <Text style={{ color: 'red' }}>Nota Maxima es 5 y solo numeros</Text>}
       </View>
 
       <View style={styles.body}>
         <Text>Nota 3*: </Text>
-        <TextInput
-          //placeholder='Ingrese la nota 3'
-          style={{ borderBottom: "solid 1px" }}
-          onChangeText={(nota3) => setNota3(nota3)}
-          value={nota3}
+        <Controller control={control}
+          rules={{ required: true, pattern: /^[0-5]+$/g }}
+          render={({ field: { onChange, onBlur, nota3 } }) => (
+
+            <TextInput
+              style={[styles.inpust, { borderColor: errors.nota1?.type == "required" || errors.nota3?.type == "pattern" ? 'red' : 'lightblue' }]}
+              onChangeText={(nota3) => setNota3(nota3)}
+              onChange={onChange}
+              onBlur={onBlur}
+              value={nota3}
+              maxLength={1}
+              minLength={1}
+            />
+          )}
+          name="nota3"
         />
+        {errors.nota3?.type == "required" && <Text style={{ color: 'red' }}> El Nota 3 es obligatoria</Text>}
+        {errors.nota3?.type == "pattern" && <Text style={{ color: 'red' }}> Nota Maxima es 5 y solo numeros.</Text>}
+
       </View>
 
       <View style={styles.body}>
         <Text>Definitiva: </Text>
         <TextInput
           //placeholder='Ingrese la nota 3'
-          style={{ borderBottom: "solid 1px" }}
+          style={[styles.inpust, { borderColor: 'lightblue' }]}
           onChangeText={(definitiva) => setDefinitiva(definitiva)}
           value={definitiva}
           editable={false}
@@ -182,7 +281,7 @@ export default function App() {
         <Text>Observacion: </Text>
         <TextInput
           //placeholder='Ingrese la nota 3'
-          style={{ borderBottom: "solid 1px" }}
+          style={[styles.inpust, { borderColor: 'lightblue' }]}
           onChangeText={(observacion) => setObservacion(observacion)}
           value={observacion}
         />
@@ -191,7 +290,7 @@ export default function App() {
       {/* ESTOS SON LOS BOTONES */}
 
       <View style={styles.botones}>
-        <TouchableOpacity onPress={guardar}>
+        <TouchableOpacity onPress={handleSubmit(onSubmit)}>
           <Text style={styles.textboton}>Guardar</Text>
         </TouchableOpacity>
 
@@ -221,6 +320,9 @@ const styles = StyleSheet.create({
   body: {
     flexDirection: "row",
     margin: 10,
+    borderBottom: "solid 1px",
+    alignItems:'center',
+    flexDirection: 'column'
   },
 
   botones: {
@@ -237,4 +339,12 @@ const styles = StyleSheet.create({
     margin: 7,
     fontFamily: "arial black",
   },
+  inpust: {
+    padding: 1,
+    borderRadius: 5,
+    color: 'black',
+    marginBottom: 5,
+    borderWidth: 2,
+    borderColor: 'lightblue'
+  }
 });
